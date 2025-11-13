@@ -26,7 +26,7 @@ async function connectMongo(): Promise<typeof mongoose> {
   if (!cached.promise) {
     cached.promise = mongoose
       .connect(MONGODB_URI!, {
-        dbName: "trainer-guide", // força o uso do DB correto
+        dbName: "trainer-guide", 
         useNewUrlParser: true,
         useUnifiedTopology: true,
       } as mongoose.ConnectOptions)

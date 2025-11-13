@@ -36,5 +36,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-// Exporta uma função que retorna o model **após a conexão**
+
 export const getUserModel = () => models.User || model("User", userSchema);
