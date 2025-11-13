@@ -6,21 +6,30 @@ if (!MONGODB_URI) {
   throw new Error("Defina MONGODB_URI no .env.local");
 }
 
-type MongooseCache = {
+interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
-};
+}
 
-// @ts-ignore
-let cached: MongooseCache = global.mongoose || { conn: null, promise: null };
-// @ts-ignore
+declare global {
+  var mongoose: MongooseCache;
+}
+
+const cached = global.mongoose || { conn: null, promise: null };
 global.mongoose = cached;
 
 async function connectMongo(): Promise<typeof mongoose> {
-  if (cached.conn) return cached.conn;
+  if (cached.conn) {
+    return cached.conn;
+  }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI!).then((mongoose) => mongoose);
+    cached.promise = mongoose
+      .connect(MONGODB_URI!, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      } as mongoose.ConnectOptions)
+      .then((mongoose) => mongoose);
   }
 
   cached.conn = await cached.promise;
