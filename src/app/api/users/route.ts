@@ -1,25 +1,30 @@
+'use server';
+
 import { NextRequest, NextResponse } from "next/server";
 import connectMongo from "@/lib/mongodb";
-import { user as User } from "../../../lib/models/user";
+import { getUserModel } from "@/lib/models/user";
 
-// Função para conectar ao MongoDB
-async function dbConnect() {
+async function getUser() {
   await connectMongo();
+  return getUserModel();
 }
 
 // GET - retorna todos os usuários
 export async function GET() {
-  await dbConnect();
-  const users = await User.find({});
-  return NextResponse.json(users);
+  try {
+    const User = await getUser();
+    const users = await User.find({});
+    return NextResponse.json(users);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
 // POST - cria um novo usuário
 export async function POST(req: NextRequest) {
-  await dbConnect();
-  const body = await req.json();
-
   try {
+    const User = await getUser();
+    const body = await req.json();
     const newUser = await User.create(body);
     return NextResponse.json(newUser, { status: 201 });
   } catch (err: any) {
@@ -29,10 +34,12 @@ export async function POST(req: NextRequest) {
 
 // PATCH - atualiza um usuário pelo userId
 export async function PATCH(req: NextRequest) {
-  await dbConnect();
-  const { userId, update } = await req.json();
-
   try {
+    const User = await getUser();
+    const { userId, update } = await req.json();
+
+    if (!userId) return NextResponse.json({ error: "userId não fornecido" }, { status: 400 });
+
     const updatedUser = await User.findOneAndUpdate({ userId }, update, { new: true });
     if (!updatedUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
@@ -44,11 +51,15 @@ export async function PATCH(req: NextRequest) {
 
 // DELETE - deleta um usuário pelo userId
 export async function DELETE(req: NextRequest) {
-  await dbConnect();
-  const { userId } = await req.json();
-
   try {
+    const url = new URL(req.url);
+    const userId = url.searchParams.get("userId");
+
+    if (!userId) return NextResponse.json({ error: "userId não fornecido" }, { status: 400 });
+
+    const User = await getUser();
     const deletedUser = await User.findOneAndDelete({ userId });
+
     if (!deletedUser) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     return NextResponse.json({ message: "User deleted" });
