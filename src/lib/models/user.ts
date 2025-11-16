@@ -7,9 +7,9 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     Age: { type: Number, required: true },
     EmailAddress: { type: String, required: true, unique: true },
-    PasswordHash: { type: String, required: true },
+    PasswordHash: { type: String, required: true, },
     Security: {
-      CreatedAt: { type: Date, default: Date.now },
+      CreatedAt: { type: Date, default: Date.now ,},
       UpdatedAt: { type: Date },
       Auth2: { type: Boolean, default: false },
       FailedAttempts: { type: Number, default: 0 },
