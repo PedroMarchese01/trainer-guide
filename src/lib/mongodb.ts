@@ -1,40 +1,33 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI: string = process.env.MONGODB_URI as string;
 
 if (!MONGODB_URI) {
-  throw new Error("Defina MONGODB_URI no .env.local");
+  throw new Error("Defina MONGODB_URI no arquivo .env.local");
 }
 
-interface MongooseCache {
-  conn: typeof mongoose | null;
-  promise: Promise<typeof mongoose> | null;
-}
-
+// Tipagem global correta para evitar erros TS
 declare global {
-  var mongoose: MongooseCache;
+  // eslint-disable-next-line no-var
+  var _mongoose: {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
+  } | undefined;
 }
 
-const cached = global.mongoose || { conn: null, promise: null };
-global.mongoose = cached;
+// Se já existir no global, usa. Senão, cria.
+const cached = global._mongoose || { conn: null, promise: null };
+global._mongoose = cached;
 
-async function connectMongo(): Promise<typeof mongoose> {
-  if (cached.conn) {
-    return cached.conn;
-  }
+export default async function connectMongo(): Promise<Mongoose> {
+  if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose
-      .connect(MONGODB_URI!, {
-        dbName: "trainer-guide", 
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      } as mongoose.ConnectOptions)
-      .then((mongoose) => mongoose);
+    cached.promise = mongoose.connect(MONGODB_URI, {
+      dbName: "trainer-guide",
+    });
   }
 
   cached.conn = await cached.promise;
   return cached.conn;
 }
-
-export default connectMongo;
