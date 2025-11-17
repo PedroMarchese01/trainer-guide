@@ -13,7 +13,7 @@ export default function Login() {
         <h1 className="flex md:text-2xl font-semibold justify-center text-xl">Logar</h1>
         <FormLogin/>
         <p className="flex justify-center">Não tem conta ainda?</p>
-        <Link className="flex justify-center text-blue-500 hover:cursor-pointer" href={"/signup"}>Cadastre-se</Link>
+        <Link className="flex justify-center text-blue-500 hover:cursor-pointer font-semibold" href={"/signup"}>Cadastre-se</Link>
       </div>
         <Link className="flex gap-1 transition-transform duration-300 hover:translate-x-1 hover:scale-110 hover:rotate-2" href={"/trainee-guide"}>
           <p className="text-white font-semibold">Conheça a trainee guide </p>
