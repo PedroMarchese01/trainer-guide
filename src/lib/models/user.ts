@@ -11,8 +11,6 @@ const userSchema = new Schema(
     Security: {
       CreatedAt: { type: Date, default: Date.now ,},
       UpdatedAt: { type: Date },
-      Auth2: { type: Boolean, default: false },
-      FailedAttempts: { type: Number, default: 0 },
     },
     Banned: {
       Status: { type: Boolean, default: false },
