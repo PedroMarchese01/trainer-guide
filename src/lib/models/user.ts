@@ -6,8 +6,8 @@ const userSchema = new Schema(
     userId: { type: String, default: () => uuid(), unique: true },
     name: { type: String, required: true },
     Age: { type: Number, required: true },
-    EmailAddress: { type: String, required: true, unique: true },
-    PasswordHash: { type: String, required: true, },
+    Email: { type: String, required: true, unique: true },
+    Password: { type: String, required: true, },
     Security: {
       CreatedAt: { type: Date, default: Date.now ,},
       UpdatedAt: { type: Date },
