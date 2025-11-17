@@ -13,6 +13,7 @@ import { Checkbox } from "../../components/ui/checkbox";
 import { Label } from "@radix-ui/react-label";
 import { stringify } from "querystring";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 export default function FormSign() {
@@ -133,6 +134,7 @@ export default function FormSign() {
 }
 
   return (
+    <>
     <div className="flex flex-col align-middle gap-4 bg-[#f9f9f9] p-10 rounded-lg">
 
         {steps == 0 && (
@@ -196,5 +198,6 @@ export default function FormSign() {
             </div>
         )}
     </div>
+        <Link className="flex justify-center cursor-pointer text-white mt-2 font-semibold" href = "/">Voltar para o Login</Link></>
   );
 }
