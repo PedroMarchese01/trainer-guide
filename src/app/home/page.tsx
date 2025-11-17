@@ -1,8 +1,13 @@
-export default function Home (){
+import SidebarWrapper from "./components/sidebarWrapper";
 
-    return(
-        <div>
-            <p>Home</p>
-        </div>
-    )
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex h-screen w-full">
+      
+    </div>
+  );
 }
