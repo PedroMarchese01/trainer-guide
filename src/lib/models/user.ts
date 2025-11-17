@@ -13,8 +13,6 @@ const userSchema = new Schema(
       UpdatedAt: { type: Date },
       Auth2: { type: Boolean, default: false },
       FailedAttempts: { type: Number, default: 0 },
-      LastLog: { type: Date },
-      LastIp: { type: String },
     },
     Banned: {
       Status: { type: Boolean, default: false },
