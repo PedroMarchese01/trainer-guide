@@ -8,6 +8,7 @@ const userSchema = new Schema(
     Age: { type: Number, required: true },
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true, },
+    points:{ type: Number , default:0},
     Security: {
       CreatedAt: { type: Date, default: Date.now ,},
       UpdatedAt: { type: Date },
