@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Sidebar as SidebarP,
   SidebarHeader,
@@ -15,6 +16,9 @@ import {
 } from "@/components/ui/sidebar";
 
 export default function Sidebar() {
+  const pathname = usePathname();
+  const isActive = (path: string) => pathname === path;
+
   return (
     <SidebarP 
       variant="inset"
@@ -26,25 +30,48 @@ export default function Sidebar() {
 
       <SidebarContent className="bg-black text-white">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-gray-300">
+          <SidebarGroupLabel className="text-gray-300 mb-4">
             Navegação
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
             <SidebarMenu>
 
-              <SidebarMenuItem>
+              <SidebarMenuItem className="mb-1">
                 <SidebarMenuButton asChild>
-                  <Link href="/home/profile">
-                    <p>Perfil</p>
+                  <Link
+                    href="/home"
+                    className={`block px-2 py-1 rounded ${
+                      isActive("/home") ? "bg-white text-black" : "text-white"
+                    }`}
+                  >
+                    Home
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              <SidebarMenuItem>
+              <SidebarMenuItem className="mb-1">
                 <SidebarMenuButton asChild>
-                  <Link href="/home/guide">
-                    <p>Guias</p>
+                  <Link
+                    href="/home/profile"
+                    className={`block px-2 py-1 rounded ${
+                      isActive("/home/profile") ? "bg-white text-black" : "text-white"
+                    }`}
+                  >
+                    Perfil
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem className="mb-1">
+                <SidebarMenuButton asChild>
+                  <Link
+                    href="/home/guide"
+                    className={`block px-2 py-1 rounded ${
+                      isActive("/home/guide") ? "bg-white text-black" : "text-white"
+                    }`}
+                  >
+                    Guias
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
