@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
 
       {/* Trigger no mobile */}
-      <div className=" p-2 bg-[#06030f]">
+      <div className="bg-[#06030f]">
         <SidebarTrigger className="text-white"/>
       </div>
 

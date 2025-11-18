@@ -22,10 +22,10 @@ export default function Sidebar() {
 
   return (
     <SidebarP
-      variant="inset"
+      
       className="bg-black text-white border-r border-white/10 h-full"
     >
-      <SidebarHeader className="bg-black text-white border-b border-white/10 grid grid-cols-3">
+      <SidebarHeader className="bg-black text-white border-b grid grid-cols-3">
         <h2 className="font-semibold text-lg col-span-2 mx-auto">Trainee Guide</h2>
         <SidebarTrigger className="text-white ml-auto"/>
       </SidebarHeader>
