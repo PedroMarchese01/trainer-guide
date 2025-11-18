@@ -3,33 +3,24 @@
 import { usePathname } from "next/navigation";
 import Sidebar from "./sidebar";
 
-export default function SidebarWrapper({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SidebarWrapper() {
   const pathname = usePathname();
 
-  // Rotas que NÃO devem mostrar sidebar
+  // Rotas sem sidebar
   const noSidebar = ["/login", "/signup", "/"];
 
-  // Se for login ou signup → NÃO mostra sidebar
   if (noSidebar.includes(pathname)) {
-    return <>{children}</>;
+    return null;
   }
 
-  // Sidebar só aparece em rotas que começam com /home
-  const isHomeRoute = pathname.startsWith("/home");
+  // Sidebar só aparece em rotas /home
+  const isHome = pathname.startsWith("/home");
 
-  if (isHomeRoute) {
+  if (isHome) {
     return (
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
-      </div>
+      <Sidebar />
     );
   }
 
-  // Qualquer outra rota → sem sidebar
-  return <>{children}</>;
+  return null;
 }

@@ -1,10 +1,31 @@
-"use client";
+"use client"
+import {
+  Sidebar as SidebarP,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 
 export default function Sidebar() {
+
   return (
-    <aside className="w-60 min-h-screen bg-gray-900 text-white p-4">
-      <h2 className="text-xl font-bold mb-6">Sidebar</h2>
-      <p>Links...</p>
-    </aside>
+    <SidebarP>
+      <SidebarHeader>
+        
+      </SidebarHeader>
+      <SidebarContent>
+
+
+        <SidebarGroup />
+        <SidebarGroup />
+
+      </SidebarContent>
+
+      <SidebarFooter>
+
+      </SidebarFooter>
+    </SidebarP>
   );
 }
