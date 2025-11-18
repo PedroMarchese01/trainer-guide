@@ -8,7 +8,6 @@ const userSchema = new Schema(
     Age: { type: Number, required: true },
     Email: { type: String, required: true, unique: true },
     Password: { type: String, required: true, },
-    points:{ type: Number , default:0},
     Security: {
       CreatedAt: { type: Date, default: Date.now ,},
       UpdatedAt: { type: Date },
@@ -23,7 +22,7 @@ const userSchema = new Schema(
     Infos: {
       Questions: { type: Number, default: 0 },
       Answers: { type: Number, default: 0 },
-      Rank: { type: String, default: "no rank" },
+      points:{ type: Number , default:0},
       TrailStarted: { type: [String], default: [] },
       TrailEnded: { type: [String], default: [] },
       Plan: { type: String, default: "Free" },
