@@ -1,4 +1,3 @@
-"use client";
 
 import { SidebarProvider, SidebarTrigger, Sidebar as SidebarP } from "@/components/ui/sidebar";
 import Sidebar from "./components/sidebar";
