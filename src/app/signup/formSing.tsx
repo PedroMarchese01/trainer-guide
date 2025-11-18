@@ -161,7 +161,7 @@ export default function FormSign() {
                 <p>Um email de verificação sera enviado para:</p>
                 <p className="mx-auto">{form.email}</p>
                 <div className="flex justify-between">
-                    <Button className="flex w-[45%]" onClick={() => setSteps(50)}>voltar</Button>
+                    <Button className="flex w-[45%]" onClick={() => setSteps(0)}>voltar</Button>
                     <Button className="bg-blue-500 flex w-[45%]" onClick={() => {
                         sendEmail(form.email)
                         setSteps(100)
@@ -190,6 +190,7 @@ export default function FormSign() {
                     </InputOTPGroup>
                 </InputOTP>
                 <Button className = "mt-4"onClick={() => confer()}>Validar e cadastrar</Button>
+                <Button className = "mt-4"onClick={() => setSteps(50)}>voltar</Button>
                 <div className="flex flex-col mt-2">
                     <p className="mx-auto">Não recebeu o e-mail?</p>
                     <p>Confira a caixa de spam ou se digitou o endereço corretamente.</p>
