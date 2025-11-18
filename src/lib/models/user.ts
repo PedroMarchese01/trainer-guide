@@ -6,7 +6,7 @@ const userSchema = new Schema(
     userId: { type: String, default: () => uuid(), unique: true },
     name: { type: String, required: true },
     Age: { type: Number, required: true },
-    Email: { type: String, required: true, unique: true },
+    Email: { type: String, required: true, unique: true, set: (value: string) => value.toLowerCase() },
     Password: { type: String, required: true, },
     Security: {
       CreatedAt: { type: Date, default: Date.now ,},
@@ -33,4 +33,5 @@ const userSchema = new Schema(
 );
 
 
-export const getUserModel = () => models.User || model("User", userSchema);
+if (models.User) delete models.User;
+export const getUserModel = () => model("User", userSchema);
