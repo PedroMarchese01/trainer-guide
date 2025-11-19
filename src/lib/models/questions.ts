@@ -18,7 +18,7 @@ const questionSchema = new Schema(
     Content: {
       Text: { type: String, default: "" },
       Repository: { type: String, default: null },
-      Areas:{type: Array, required: true},
+      Areas:{type: [String],default:[], required: true},
     },
 
     AnsweredBy: {

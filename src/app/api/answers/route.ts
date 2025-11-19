@@ -36,15 +36,15 @@ export async function POST(req: NextRequest) {
 }
 
 // ===================== PATCH =====================
-// PATCH - atualiza uma resposta pelo Id
+// PATCH - atualiza uma resposta pelo _id
 export async function PATCH(req: NextRequest) {
   try {
     const Answer = await getAnswer();
-    const { Id, update } = await req.json();
+    const { _id, update } = await req.json();
 
-    if (!Id) return NextResponse.json({ error: "Id não fornecido" }, { status: 400 });
+    if (!_id) return NextResponse.json({ error: "_id não fornecido" }, { status: 400 });
 
-    const updatedAnswer = await Answer.findOneAndUpdate({ Id }, update, { new: true });
+    const updatedAnswer = await Answer.findByIdAndUpdate(_id, update, { new: true });
     if (!updatedAnswer) return NextResponse.json({ error: "Answer not found" }, { status: 404 });
 
     return NextResponse.json(updatedAnswer);
@@ -54,16 +54,16 @@ export async function PATCH(req: NextRequest) {
 }
 
 // ===================== DELETE =====================
-// DELETE - deleta uma resposta pelo Id
+// DELETE - deleta uma resposta pelo _id
 export async function DELETE(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const Id = url.searchParams.get("Id");
+    const _id = url.searchParams.get("_id");
 
-    if (!Id) return NextResponse.json({ error: "Id não fornecido" }, { status: 400 });
+    if (!_id) return NextResponse.json({ error: "_id não fornecido" }, { status: 400 });
 
     const Answer = await getAnswer();
-    const deletedAnswer = await Answer.findOneAndDelete({ Id });
+    const deletedAnswer = await Answer.findByIdAndDelete(_id);
 
     if (!deletedAnswer) return NextResponse.json({ error: "Answer not found" }, { status: 404 });
 
@@ -72,4 +72,3 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
-

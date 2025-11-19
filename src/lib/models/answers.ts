@@ -1,23 +1,24 @@
 import { Schema, model, models } from "mongoose";
 import { v4 as uuid } from "uuid";
 
+// Subschema para cada mensagem do chat
+const dialogItemSchema = new Schema({
+  User: { type: String, required: true },
+  UserId: { type: String, required: true },
+  Text: { type: String, required: true },
+  timeStamp: { type: Date, required: true },
+});
+
+// Schema principal da resposta
 const answerSchema = new Schema(
   {
     Id: { type: String, default: () => uuid(), unique: true }, // ID da resposta
-
     Pergunta: { type: String, required: true }, // ID da pergunta associada
     User: { type: String, required: true }, // nome do usuário que respondeu
-    UserId: { type: Number, required: true }, // ID do usuário que respondeu
+    UserId: { type: String, required: true }, // ID do usuário que respondeu  
 
     content: {
-      Dialog: [
-        {
-          User: { type: String, required: true },
-          UserId: { type: Number, required: true },
-          Text: { type: String, required: true },
-          timeStamp: { type: Date, default: Date.now } // data e hora do envio
-        }
-      ],
+      Dialog: { type: [dialogItemSchema], default: [] }, // array de mensagens
       Drop: { type: Boolean, default: false } // indica se o usuário desistiu
     },
 
