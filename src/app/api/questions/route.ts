@@ -26,19 +26,17 @@ export async function POST(req: NextRequest) {
     const Question = await getQuestion();
     const body = await req.json();
 
-    // LOG para debug
     console.log("RECEBIDO NO POST:", body);
 
-    // Corrigido → agora Content.Areas é incluído corretamente
     const newQuestion = await Question.create({
       RequestedBy: body.RequestedBy,
 
       Content: {
         Text: body.Content?.Text || "",
         Repository: body.Content?.Repository || null,
-        Areas: Array.isArray(body.Content?.Areas) 
-          ? body.Content.Areas 
-          : [], // garante array sempre
+        Areas: Array.isArray(body.Content?.Areas)
+          ? body.Content.Areas
+          : [],
       },
     });
 
@@ -58,7 +56,8 @@ export async function PATCH(req: NextRequest) {
     if (!Id) return NextResponse.json({ error: "Id não fornecido" }, { status: 400 });
 
     const updatedQuestion = await Question.findOneAndUpdate({ Id }, update, { new: true });
-    if (!updatedQuestion) return NextResponse.json({ error: "Question not found" }, { status: 404 });
+    if (!updatedQuestion)
+      return NextResponse.json({ error: "Question not found" }, { status: 404 });
 
     return NextResponse.json(updatedQuestion);
   } catch (err: any) {
@@ -72,12 +71,14 @@ export async function DELETE(req: NextRequest) {
     const url = new URL(req.url);
     const Id = url.searchParams.get("Id");
 
-    if (!Id) return NextResponse.json({ error: "Id não fornecido" }, { status: 400 });
+    if (!Id)
+      return NextResponse.json({ error: "Id não fornecido" }, { status: 400 });
 
     const Question = await getQuestion();
     const deletedQuestion = await Question.findOneAndDelete({ Id });
 
-    if (!deletedQuestion) return NextResponse.json({ error: "Question not found" }, { status: 404 });
+    if (!deletedQuestion)
+      return NextResponse.json({ error: "Question not found" }, { status: 404 });
 
     return NextResponse.json({ message: "Question deleted" });
   } catch (err: any) {

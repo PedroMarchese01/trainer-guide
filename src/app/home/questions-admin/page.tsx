@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 type DialogItem = {
   User: string;
@@ -38,6 +39,64 @@ export default function QuestionAdmin() {
   const [sending, setSending] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
+  const duvidaEsclarecida = async (answer: Answer) => {
+  try {
+    const localS = localStorage.getItem("userLog");
+    if (!localS) return toast.error("Usuário não logado.");
+
+    const loggedUser = JSON.parse(localS);
+
+    // 🔍 Buscar todos os usuários
+    const userRes = await fetch("/api/users");
+    const allUsers = await userRes.json();
+
+    const user = allUsers.find((u: any) => u.userId === answer.UserId);
+
+    if (!user) return toast.error("Usuário da resposta não encontrado.");
+
+    // 🔥 1) adicionar +50 pontos
+    await fetch("/api/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: answer.UserId,
+        update: { Infos: { points: user.Infos.points + 50 } },
+      }),
+    });
+
+    // 🔍 🔥 2) BUSCAR A PERGUNTA PELO _id (answer.Pergunta)
+    const qRes = await fetch("/api/questions");
+    const allQ = await qRes.json();
+
+    const question = allQ.find((q: any) => q._id === answer.Pergunta);
+
+    if (!question) {
+      console.error("PERGUNTA NAO ACHADA PARA:", answer.Pergunta);
+      return toast.error("Erro: pergunta não encontrada.");
+    }
+
+    // 🔥 3) DELETAR A RESPOSTA
+    await fetch(`/api/answers?_id=${answer._id}`, {
+      method: "DELETE",
+    });
+
+    // 🔥 4) DELETAR A PERGUNTA
+    await fetch(`/api/questions?Id=${question.Id}`, {
+      method: "DELETE",
+    });
+
+    // 🔥 5) REMOVER DA UI
+    setReceivedAnswers((prev) => prev.filter((a) => a._id !== answer._id));
+    setQuestions((prev) => prev.filter((q) => q._id !== answer.Pergunta));
+
+    toast.success("Dúvida esclarecida! +50 pontos adicionados.");
+  } catch (err) {
+    console.error(err);
+    toast.error("Erro ao processar dúvida esclarecida.");
+  }
+};
+
+
   useEffect(() => {
     const localS = localStorage.getItem("userLog");
     if (!localS) {
@@ -48,25 +107,20 @@ export default function QuestionAdmin() {
 
     async function fetchData() {
       try {
-        // Buscar perguntas
         const qRes = await fetch("/api/questions");
         const qData: Question[] = await qRes.json();
         setQuestions(qData);
 
-        // Buscar respostas
         const aRes = await fetch("/api/answers");
         const aData: Answer[] = await aRes.json();
 
-        // Respostas enviadas pelo usuário logado
         const sent = aData.filter((a) => a.UserId === user.userId);
         setSentAnswers(sent);
 
-        // IDs das perguntas que o usuário fez
         const myQuestionIds = qData
-          .filter((q) => q.RequestedBy.UserId === user._id) // ou user.userId se quiser
+          .filter((q) => q.RequestedBy.UserId === user._id)
           .map((q) => q._id);
 
-        // Todas as respostas relacionadas às minhas perguntas (independente de quem enviou)
         const received = aData.filter((a) => myQuestionIds.includes(a.Pergunta));
         setReceivedAnswers(received);
       } catch (err) {
@@ -79,12 +133,10 @@ export default function QuestionAdmin() {
     fetchData();
   }, [router]);
 
-  // Scroll automático
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [openChatId, receivedAnswers, sentAnswers]);
 
-  // Enviar mensagem
   const handleSendMessage = async (answer: Answer) => {
     if (!newMessage.trim()) return;
     setSending(true);
@@ -107,7 +159,6 @@ export default function QuestionAdmin() {
 
     const updatedAnswer = { ...answer, content: updatedContent };
 
-    // Atualiza local
     if (answer.UserId === user.userId) {
       setSentAnswers((prev) =>
         prev.map((a) => (a._id === answer._id ? updatedAnswer : a))
@@ -137,7 +188,13 @@ export default function QuestionAdmin() {
     }
   };
 
-  const AnswerItem = ({ answer }: { answer: Answer }) => (
+  const AnswerItem = ({
+    answer,
+    received,
+  }: {
+    answer: Answer;
+    received?: boolean;
+  }) => (
     <div className="bg-white/5 border border-white/20 rounded-lg p-3 hover:bg-white/10 transition">
       <p className="font-medium">Pergunta ID: {answer.Pergunta}</p>
       <p className="text-gray-300">De/Para: {answer.User}</p>
@@ -147,14 +204,25 @@ export default function QuestionAdmin() {
           ? answer.content.Dialog[answer.content.Dialog.length - 1].Text
           : "Sem mensagens"}
       </p>
+
       <Button
         onClick={() =>
           setOpenChatId(openChatId === answer._id ? null : answer._id)
         }
-        className="mt-2 bg-blue-600 hover:bg-blue-700"
+        className="mt-2 bg-blue-600 hover:bg-blue-700 w-full"
       >
         {openChatId === answer._id ? "Fechar Chat" : "Abrir Chat"}
       </Button>
+
+      {/* 🔥 BOTÃO EXTRA SOMENTE NAS RESPOSTAS RECEBIDAS */}
+      {received && (
+        <Button
+          onClick={() => duvidaEsclarecida(answer)}
+          className="mt-2 bg-green-600 hover:bg-green-700 w-full"
+        >
+          Duvida esclarecida
+        </Button>
+      )}
 
       {openChatId === answer._id && <ChatBox answer={answer} />}
     </div>
@@ -178,6 +246,7 @@ export default function QuestionAdmin() {
         )}
         <div ref={chatEndRef} />
       </div>
+
       <div className="flex gap-2">
         <Textarea
           value={newMessage}
@@ -211,29 +280,33 @@ export default function QuestionAdmin() {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Respostas recebidas */}
+        {/* RESPOSTAS RECEBIDAS */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Respostas Recebidas
           </h2>
           {receivedAnswers.length === 0 ? (
-            <p className="text-gray-400 text-center">Nenhuma resposta recebida.</p>
+            <p className="text-gray-400 text-center">
+              Nenhuma resposta recebida.
+            </p>
           ) : (
             <div className="flex flex-col gap-3">
               {receivedAnswers.map((a) => (
-                <AnswerItem key={a._id} answer={a} />
+                <AnswerItem key={a._id} answer={a} received />
               ))}
             </div>
           )}
         </div>
 
-        {/* Respostas enviadas */}
+        {/* RESPOSTAS ENVIADAS */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Respostas Enviadas
           </h2>
           {sentAnswers.length === 0 ? (
-            <p className="text-gray-400 text-center">Nenhuma resposta enviada.</p>
+            <p className="text-gray-400 text-center">
+              Nenhuma resposta enviada.
+            </p>
           ) : (
             <div className="flex flex-col gap-3">
               {sentAnswers.map((a) => (
