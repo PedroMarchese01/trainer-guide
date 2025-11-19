@@ -96,7 +96,7 @@ export default function Sidebar() {
         {/* GUIAS E ESTUDOS */}
         <SidebarGroup>
           <SidebarGroupLabel className="text-gray-300 mb-2">
-            Guias e Estudos
+            Trilhas e Estudos
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -105,14 +105,14 @@ export default function Sidebar() {
                 <SidebarMenuButton asChild>
                   <Link
                     prefetch
-                    href="/home/guide"
+                    href="/home/trails"
                     className={`block px-2 py-1 rounded ${
                       isActive("/home/guide")
                         ? "bg-white text-black"
                         : "text-white"
                     }`}
                   >
-                    Guias
+                    Trilhas
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -140,7 +140,7 @@ export default function Sidebar() {
                         : "text-white"
                     }`}
                   >
-                    Responder Perguntas
+                    Responder
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -156,7 +156,7 @@ export default function Sidebar() {
                         : "text-white"
                     }`}
                   >
-                    Fazer Pergunta
+                    Perguntar
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
