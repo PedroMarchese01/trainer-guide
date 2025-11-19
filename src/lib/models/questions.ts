@@ -10,7 +10,7 @@ const questionSchema = new Schema(
 
     RequestedBy: {
       User: { type: String, required: true },
-      UserId: { type: Number, required: true },
+      UserId: { type: String, required: true },
     },
 
     RequestDate: { type: Date, default: Date.now },
@@ -18,6 +18,7 @@ const questionSchema = new Schema(
     Content: {
       Text: { type: String, default: "" },
       Repository: { type: String, default: null },
+      Areas:{type: Array, required: true},
     },
 
     AnsweredBy: {
