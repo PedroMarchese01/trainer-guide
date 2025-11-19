@@ -154,8 +154,8 @@ export default function AnswerPage() {
         ) : (
           <div className="flex flex-col gap-4 pb-10">
             {filteredQuestions.map((q) => (
-              <div key={q._id} className="border border-white/20 bg-white/5 p-4 rounded-lg break-words">
-                <h4 className="text-lg font-semibold break-words">{q.Content?.Text}</h4>
+              <div key={q._id} className="border border-white/20 bg-white/5 p-4 rounded-lg wrap-break-word">
+                <h4 className="text-lg font-semibold wrap-break-word">{q.Content?.Text}</h4>
 
                 {q.Content?.Repository && (
                   <p className="break-all">
@@ -175,7 +175,7 @@ export default function AnswerPage() {
                   {q.Resolved ? "Resolvido" : "Pendente"}
                 </p>
 
-                <p className="text-sm mt-2 text-gray-400 break-words">
+                <p className="text-sm mt-2 text-gray-400 wrap-break-word">
                   Linguagens: {q.Content?.Areas?.length ? q.Content.Areas.join(", ") : "Nenhuma"}
                 </p>
 
