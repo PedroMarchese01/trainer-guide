@@ -81,15 +81,15 @@ export default function AnswerPage() {
     : questions;
 
   return (
-    <div className="text-white p-6">
+    <div className="text-white p-4 sm:p-6 h-full w-full overflow-hidden flex flex-col">
       <h2 className="text-2xl">Responda Perguntas</h2>
 
       <ul className="flex flex-col py-4 gap-2">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <ArrowRight />
           <li>Para cada pergunta acertada +50 pontos!</li>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <ArrowRight />
           <li>Você não perde pontos por tentar!</li>
         </div>
@@ -146,19 +146,19 @@ export default function AnswerPage() {
       </div>
 
       {/* LISTA DE PERGUNTAS */}
-      <div className="mt-6">
+      <div className="mt-6 flex-1 overflow-y-auto pr-2 custom-scrollbar">
         <h3 className="text-xl font-semibold mb-3">Perguntas Disponíveis</h3>
 
         {filteredQuestions.length === 0 ? (
           <p className="text-gray-400">Nenhuma pergunta encontrada.</p>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 pb-10">
             {filteredQuestions.map((q) => (
-              <div key={q._id} className="border border-white/20 bg-white/5 p-4 rounded-lg">
-                <h4 className="text-lg font-semibold">{q.Content?.Text}</h4>
+              <div key={q._id} className="border border-white/20 bg-white/5 p-4 rounded-lg break-words">
+                <h4 className="text-lg font-semibold break-words">{q.Content?.Text}</h4>
 
                 {q.Content?.Repository && (
-                  <p>
+                  <p className="break-all">
                     Repositório: {q.Content.Repository}
                   </p>
                 )}
@@ -175,12 +175,12 @@ export default function AnswerPage() {
                   {q.Resolved ? "Resolvido" : "Pendente"}
                 </p>
 
-                <p className="text-sm mt-2 text-gray-400">
+                <p className="text-sm mt-2 text-gray-400 break-words">
                   Linguagens: {q.Content?.Areas?.length ? q.Content.Areas.join(", ") : "Nenhuma"}
                 </p>
 
                 <Button
-                  className="bg-blue-500 mt-2 hover:bg-blue-800"
+                  className="bg-blue-500 mt-2 hover:bg-blue-800 w-full sm:w-auto"
                   onClick={() => router.push(`/home/answer/chat?id=${q._id}`)}
                 >
                   Responder
@@ -193,3 +193,17 @@ export default function AnswerPage() {
     </div>
   );
 }
+
+/* Custom Scrollbar */
+<style jsx global>{`
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+`}</style>
