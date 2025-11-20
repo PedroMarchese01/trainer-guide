@@ -1,4 +1,3 @@
-"use client"
 import { Suspense } from "react";
 import ChatPage from "./chatpage.tsx";
 
