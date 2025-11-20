@@ -16,7 +16,7 @@ export default function Login() {
         <p className="flex justify-center">Não tem conta ainda?</p>
         <Link className="flex justify-center text-blue-500 hover:cursor-pointer font-semibold" href={"/signup"}>Cadastre-se</Link>
       </div>
-        <Link className="flex gap-1 transition-transform duration-300 hover:translate-x-1 hover:scale-110 hover:rotate-2" href={"/trainee-guide"}>
+        <Link className="flex gap-1 transition-transform duration-300 hover:translate-x-1 hover:scale-110 hover:rotate-2" href={"/about"}>
           <p className="text-white font-semibold">Conheça a trainee guide </p>
           <div className="text-white arrow-slide">
             <ArrowRight/>
