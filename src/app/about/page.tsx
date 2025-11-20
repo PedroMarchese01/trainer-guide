@@ -67,7 +67,7 @@
             {[
                 { name: "Augusto Valerio", rm: "562185", github: "https://github.com/Augusto-Valerio", img:"/caminho" },
                 { name: "Jonas Esteves", rm: "564143", github: "https://github.com/JonasEstevess",img:"/caminho" },
-                { name: "Pedro Marchese", rm: "563336", github: "https://github.com/pedromarchese", img:"/images/pedro.jfif" },
+                { name: "Pedro Marchese", rm: "563336", github: "https://github.com/PedroMarchese01", img:"/images/pedro.jfif" },
             ].map((person, i) => (
                 <div
                 key={i}
