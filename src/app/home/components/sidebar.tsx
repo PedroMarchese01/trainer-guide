@@ -58,19 +58,6 @@ export default function Sidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    prefetch
-                    href="/home/profile"
-                    className={`block px-2 py-1 rounded ${
-                      isActive("/home/profile")
-                        ? "bg-white text-black"
-                        : "text-white"
-                    }`}
-                  >
-                    Perfil
-                  </Link>
-                </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
