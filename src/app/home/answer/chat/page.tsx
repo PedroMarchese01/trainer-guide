@@ -4,22 +4,24 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-export default function ChatPage() {
-  type DialogItem = {
-    User: string;
-    UserId: string;
-    Text: string;
-    timeStamp: string;
-  };
+// ⬇️ TYPES FORA DO COMPONENTE (CORREÇÃO NECESSÁRIA PARA BUILD)
+type DialogItem = {
+  User: string;
+  UserId: string;
+  Text: string;
+  timeStamp: string;
+};
 
-  type Answer = {
-    _id: string;
-    Pergunta: string;
-    User: string;
-    UserId: string;
-    content: { Dialog: DialogItem[]; Drop: boolean };
-    Saved: boolean;
-  };
+type Answer = {
+  _id: string;
+  Pergunta: string;
+  User: string;
+  UserId: string;
+  content: { Dialog: DialogItem[]; Drop: boolean };
+  Saved: boolean;
+};
+
+export default function ChatPage() {
 
   const [chatData, setChatData] = useState<Answer | false | null>(null);
   const [newMessage, setNewMessage] = useState("");
@@ -28,7 +30,7 @@ export default function ChatPage() {
   const id = params.get("id");
   const router = useRouter();
 
-  const isCreating = useRef(false); // ✅ flag para prevenir POST duplo
+  const isCreating = useRef(false);
 
   useEffect(() => {
     const localS = localStorage.getItem("userLog");
@@ -51,7 +53,7 @@ export default function ChatPage() {
         if (existingAnswer) {
           setChatData(existingAnswer);
         } else if (!isCreating.current) {
-          isCreating.current = true; // evita criar novamente
+          isCreating.current = true;
 
           const newAnswer: Omit<Answer, "_id"> = {
             Pergunta: id || "",
