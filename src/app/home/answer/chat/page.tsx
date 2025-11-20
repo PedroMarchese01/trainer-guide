@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import ChatPage from "./chatpage.tsx";
-
+export const dynamic = "force-dynamic"
+;
 export default function Page() {
   return (
     <Suspense fallback={<p>Carregando...</p>}>
