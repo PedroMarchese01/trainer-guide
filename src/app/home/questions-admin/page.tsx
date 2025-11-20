@@ -21,7 +21,7 @@ type Question = {
 
 type Answer = {
   _id: string;
-  Pergunta: string; // ID da pergunta associada
+  Pergunta: string;
   User: string;
   UserId: string;
   content: { Dialog: DialogItem[]; Drop: boolean };
@@ -40,62 +40,55 @@ export default function QuestionAdmin() {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   const duvidaEsclarecida = async (answer: Answer) => {
-  try {
-    const localS = localStorage.getItem("userLog");
-    if (!localS) return toast.error("Usuário não logado.");
+    try {
+      const localS = localStorage.getItem("userLog");
+      if (!localS) return toast.error("Usuário não logado.");
 
-    const loggedUser = JSON.parse(localS);
+      const loggedUser = JSON.parse(localS);
 
-    // 🔍 Buscar todos os usuários
-    const userRes = await fetch("/api/users");
-    const allUsers = await userRes.json();
+      const userRes = await fetch("/api/users");
+      const allUsers = await userRes.json();
 
-    const user = allUsers.find((u: any) => u.userId === answer.UserId);
+      const user = allUsers.find((u: any) => u.userId === answer.UserId);
 
-    if (!user) return toast.error("Usuário da resposta não encontrado.");
+      if (!user) return toast.error("Usuário da resposta não encontrado.");
 
-    // 🔥 1) adicionar +50 pontos
-    await fetch("/api/users", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: answer.UserId,
-        update: { Infos: { points: user.Infos.points + 50 } },
-      }),
-    });
+      await fetch("/api/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: answer.UserId,
+          update: { Infos: { points: user.Infos.points + 50 } },
+        }),
+      });
 
-    // 🔍 🔥 2) BUSCAR A PERGUNTA PELO _id (answer.Pergunta)
-    const qRes = await fetch("/api/questions");
-    const allQ = await qRes.json();
+      const qRes = await fetch("/api/questions");
+      const allQ = await qRes.json();
 
-    const question = allQ.find((q: any) => q._id === answer.Pergunta);
+      const question = allQ.find((q: any) => q._id === answer.Pergunta);
 
-    if (!question) {
-      console.error("PERGUNTA NAO ACHADA PARA:", answer.Pergunta);
-      return toast.error("Erro: pergunta não encontrada.");
+      if (!question) {
+        console.error("PERGUNTA NAO ACHADA PARA:", answer.Pergunta);
+        return toast.error("Erro: pergunta não encontrada.");
+      }
+
+      await fetch(`/api/answers?_id=${answer._id}`, {
+        method: "DELETE",
+      });
+
+      await fetch(`/api/questions?Id=${question.Id}`, {
+        method: "DELETE",
+      });
+
+      setReceivedAnswers((prev) => prev.filter((a) => a._id !== answer._id));
+      setQuestions((prev) => prev.filter((q) => q._id !== answer.Pergunta));
+
+      toast.success("Dúvida esclarecida! +50 pontos adicionados.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao processar dúvida esclarecida.");
     }
-
-    // 🔥 3) DELETAR A RESPOSTA
-    await fetch(`/api/answers?_id=${answer._id}`, {
-      method: "DELETE",
-    });
-
-    // 🔥 4) DELETAR A PERGUNTA
-    await fetch(`/api/questions?Id=${question.Id}`, {
-      method: "DELETE",
-    });
-
-    // 🔥 5) REMOVER DA UI
-    setReceivedAnswers((prev) => prev.filter((a) => a._id !== answer._id));
-    setQuestions((prev) => prev.filter((q) => q._id !== answer.Pergunta));
-
-    toast.success("Dúvida esclarecida! +50 pontos adicionados.");
-  } catch (err) {
-    console.error(err);
-    toast.error("Erro ao processar dúvida esclarecida.");
-  }
-};
-
+  };
 
   useEffect(() => {
     const localS = localStorage.getItem("userLog");
@@ -121,7 +114,9 @@ export default function QuestionAdmin() {
           .filter((q) => q.RequestedBy.UserId === user._id)
           .map((q) => q._id);
 
-        const received = aData.filter((a) => myQuestionIds.includes(a.Pergunta));
+        const received = aData.filter((a) =>
+          myQuestionIds.includes(a.Pergunta)
+        );
         setReceivedAnswers(received);
       } catch (err) {
         console.error("Erro ao carregar dados:", err);
@@ -207,14 +202,17 @@ export default function QuestionAdmin() {
 
       <Button
         onClick={() =>
-          setOpenChatId(openChatId === answer._id ? null : answer._id)
+          setOpenChatId(
+            openChatId === answer._id ? null : answer._id + (received ? "-r" : "-s")
+          )
         }
         className="mt-2 bg-blue-600 hover:bg-blue-700 w-full"
       >
-        {openChatId === answer._id ? "Fechar Chat" : "Abrir Chat"}
+        {openChatId === answer._id + (received ? "-r" : "-s")
+          ? "Fechar Chat"
+          : "Abrir Chat"}
       </Button>
 
-      {/* 🔥 BOTÃO EXTRA SOMENTE NAS RESPOSTAS RECEBIDAS */}
       {received && (
         <Button
           onClick={() => duvidaEsclarecida(answer)}
@@ -224,12 +222,14 @@ export default function QuestionAdmin() {
         </Button>
       )}
 
-      {openChatId === answer._id && <ChatBox answer={answer} />}
+      {openChatId === answer._id + (received ? "-r" : "-s") && (
+        <ChatBox answer={answer} />
+      )}
     </div>
   );
 
   const ChatBox = ({ answer }: { answer: Answer }) => (
-    <div className="mt-3 flex flex-col">
+    <div className="mt-3 flex flex-col bg-black" >
       <div className="max-h-[250px] overflow-y-auto border border-gray-700 p-2 rounded-lg bg-black/20 mb-2">
         {answer.content.Dialog.length > 0 ? (
           answer.content.Dialog.map((msg, i) => (
@@ -274,13 +274,12 @@ export default function QuestionAdmin() {
     );
 
   return (
-    <div className="p-6 text-white max-w-7xl mx-auto">
+    <div className="p-6 text-white max-w-7xl mx-auto bg-black">
       <h1 className="text-3xl font-bold mb-6 text-center">
         Painel de Perguntas e Respostas
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* RESPOSTAS RECEBIDAS */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Respostas Recebidas
@@ -298,7 +297,6 @@ export default function QuestionAdmin() {
           )}
         </div>
 
-        {/* RESPOSTAS ENVIADAS */}
         <div>
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Respostas Enviadas
