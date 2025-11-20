@@ -45,7 +45,7 @@ console.log(user)
       <h3 className="py-2 text-xl">o que deseja realizar hoje?</h3>
     
     <div className="flex gap-2 pb-2">
-    <Link href={"/home/guide"} >
+    <Link href={"/home/trails"} >
       <Button className="bg-green-500">Ver mais Guias</Button>
     </Link>
     <Link href={"/home/questions-admin"}>
