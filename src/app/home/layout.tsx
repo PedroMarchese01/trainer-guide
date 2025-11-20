@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Sidebar />
         </SidebarP>
 
-        <main className="h-screen w-full">
+        <main className="min-h-screen w-full">
           {children}
         </main>
 
