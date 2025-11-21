@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useRouter } from "next/navigation"
+import { Label } from "@radix-ui/react-label"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export default function FormLogin(){
 
@@ -26,6 +28,7 @@ export default function FormLogin(){
   const [form , setForm] = useState<FormProps>({ email: "", password: "" })
   const [loginError, setLoginError] = useState<string | null>(null)
   const [trys, SetTrys] = useState(0)
+  const [view , setView] = useState(false)
 
   async function verifyLogin(email: string, password: string): Promise<User | null> {
     try {
@@ -78,7 +81,7 @@ export default function FormLogin(){
   },[])
 
   return(
-    <div className="py-8">
+    <div className="py-4">
         <div className="flex flex-col align-middle gap-4">
             <Input
                 placeholder="Digite seu email"
@@ -87,10 +90,14 @@ export default function FormLogin(){
             />
             <Input
                 placeholder="Digite sua senha"
-                type="password"
+                type={view? "text":"password"}
                 value={form.password}
                 onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))}
             />
+              <div className="flex justify-center items-center gap-2">
+                <Checkbox onCheckedChange={() => setView(!view)}/>
+                <Label>Mostrar senha</Label>
+              </div>
             <Button className="bg-blue-500 hover:bg-black/80 cursor-pointer" onClick={() => verifyLogin(form.email , form.password)}>Entrar</Button>
         </div>
         <div>

@@ -65,9 +65,6 @@ console.log(user)
     ) : (
     <p className="text-gray-400">Nenhum item salvo ainda.</p>
     )}
-    <h3>Perguntas Ativas:</h3>
-
-    <p className="text-gray-400">Nenhuma pergunta realizada.</p>
-    </div>
+        </div>
   );
 }

@@ -12,12 +12,12 @@ export default function Login() {
       <div className="flex flex-col bg-[#f9f9f9] rounded-lg py-5 px-5 md:px-10 md:py-10 ">
         <h1 className="flex md:text-2xl font-semibold justify-center text-xl">Logar</h1>
         <FormLogin/>
-        <p className="mb-4">esqueceu a senha? <Link className="text-blue-500 font-semibold" href={"recover"}>clique aqui</Link></p>
+        <p className="mb-4">Esqueceu a senha? <Link className="text-blue-500 font-semibold" href={"recover"}>Clique Aqui</Link></p>
         <p className="flex justify-center">Não tem conta ainda?</p>
         <Link className="flex justify-center text-blue-500 hover:cursor-pointer font-semibold" href={"/signup"}>Cadastre-se</Link>
       </div>
         <Link className="flex gap-1 transition-transform duration-300 hover:translate-x-1 hover:scale-110 hover:rotate-2" href={"/about"}>
-          <p className="text-white font-semibold">Conheça a trainee guide </p>
+          <p className="text-white font-semibold">Conheça a trainee guide</p>
           <div className="text-white arrow-slide">
             <ArrowRight/>
           </div>

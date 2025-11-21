@@ -1,4 +1,5 @@
-
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 interface TrailContent {
   title: string;
   videos: { title: string; url: string }[];
@@ -55,7 +56,17 @@ export default async function TrailPage({ params }: { params: Promise<{ slug: st
 
   return (
     <div className="p-6 text-zinc-50">
-      
+        <div>
+  <Link
+    href="/home/trails"
+    className="group flex items-center mr-auto mb-4 text-xl font-semibold cursor-pointer"
+  >
+    <ArrowLeft className="text-white group-hover:text-blue-400 mr-2" />
+    <span className="text-white group-hover:text-blue-400 group-hover:underline decoration-blue-400">
+      Voltar
+    </span>
+  </Link>
+</div>
       <h1 className="text-3xl font-bold mb-6 ">{data.title}</h1>
 
       <section className="mb-8">

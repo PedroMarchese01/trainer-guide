@@ -94,7 +94,7 @@ export default function Sidebar() {
                     prefetch
                     href="/home/trails"
                     className={`block px-2 py-1 rounded ${
-                      isActive("/home/guide")
+                      isActive("/home/trails")
                         ? "bg-white text-black"
                         : "text-white"
                     }`}

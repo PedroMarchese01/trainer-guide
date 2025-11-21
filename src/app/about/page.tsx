@@ -1,7 +1,9 @@
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
     export default function About() {
     return (
-        <section className="min-h-screen w-full bg-linear-to-b from-blue-600 via-purple-600 to-pink-500 flex flex-col items-center py-20 px-6 text-white">
-        
+        <section className="min-h-screen w-full bg-linear-to-b from-blue-600 via-purple-600 to-pink-500 flex flex-col items-center py-20 px-6 text-white">  
+      <Link className=" items-center mr-auto ml-12 flex text-xl hover:cursor-pointer font-semibold hover:scale-110 duration-300 ease" href = {"/home/trails"}><ArrowLeft className="text-white"/>Voltar</Link>
         {/* HEADER */}
         <div className="text-center max-w-3xl mb-20 ">
             <h1 className="text-5xl font-extrabold drop-shadow-xl">
@@ -65,15 +67,14 @@
 
             <div className="grid md:grid-cols-3 gap-10">
             {[
-                { name: "Augusto Valerio", rm: "562185", github: "https://github.com/Augusto-Valerio", img:"/caminho" },
-                { name: "Jonas Esteves", rm: "564143", github: "https://github.com/JonasEstevess",img:"/caminho" },
-                { name: "Pedro Marchese", rm: "563336", github: "https://github.com/PedroMarchese01", img:"/images/pedro.jfif" },
+                { name: "Augusto Valerio", rm: "562185", github: "https://github.com/Augusto-Valerio",},
+                { name: "Jonas Esteves", rm: "564143", github: "https://github.com/JonasEstevess",},
+                { name: "Pedro Marchese", rm: "563336", github: "https://github.com/PedroMarchese01",},
             ].map((person, i) => (
                 <div
                 key={i}
                 className="bg-gray-100 rounded-2xl shadow p-6 flex flex-col items-center text-center"
                 >
-                <img src = {person.img} className="h-24 w-24 bg-gray-300 rounded-full mb-5" />
                 <h3 className="text-xl font-semibold">{person.name}</h3>
                 <p className="text-gray-700 mt-1">RM: {person.rm}</p>
                 <a
