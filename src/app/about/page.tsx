@@ -3,7 +3,7 @@ import Link from "next/link";
     export default function About() {
     return (
         <section className="min-h-screen w-full bg-linear-to-b from-blue-600 via-purple-600 to-pink-500 flex flex-col items-center py-20 px-6 text-white">  
-      <Link className=" items-center mr-auto ml-12 flex text-xl hover:cursor-pointer font-semibold hover:scale-110 duration-300 ease" href = {"/home/trails"}><ArrowLeft className="text-white"/>Voltar</Link>
+      <Link className=" items-center mr-auto ml-12 flex text-xl hover:cursor-pointer font-semibold hover:scale-110 duration-300 ease" href = {"/"}><ArrowLeft className="text-white"/>Voltar</Link>
         {/* HEADER */}
         <div className="text-center max-w-3xl mb-20 ">
             <h1 className="text-5xl font-extrabold drop-shadow-xl">
