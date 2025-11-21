@@ -123,11 +123,6 @@
       }
 
       toast.success("Conta criada com sucesso!");
-      localStorage.setItem( "userLog" , JSON.stringify({
-        Email:form.Email,
-        Password:form.password,
-      }) )
-      router.push("/home")
     } catch (err: any) {
       toast.error(err.message || "Erro ao criar conta");
     }
